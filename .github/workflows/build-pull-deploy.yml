@@ -25,7 +25,6 @@ jobs:
       run: |
         sed -i "s/repository-id/${{ env.MY_REGISTRY_ID }}/g" ./k8s/app-deployment.yml
         sed -i "s/\:latest/\:${{ github.ref_name }}/g" ./k8s/app-deployment.yml
-
     - name: Setup Kubernetes
       uses: azure/setup-kubectl@v4
       with:
@@ -35,8 +34,6 @@ jobs:
       run: |
         echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode > config
         chmod 600 config
-
-
     - name: Deploy to Kubernetes
       run: |
         kubectl --kubeconfig=config --insecure-skip-tls-verify apply -f ./k8s/app-deployment.yml
